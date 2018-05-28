@@ -11,4 +11,7 @@ cat ~/.vim_runtime/configs/gitconfig > ~/.gitconfig
 echo "Installed git configuration successfully! Enjoy :-)"
 
 cat ~/.vim_runtime/configs/bash_profile > ~/.bash_profile
-echo "Installed zsh as default terminal"
+echo "Installed bash_profile"
+
+cat ~/.vim_runtime/configs/gitignore > ~/.gitignore
+echo "Installed user .gitignore"
