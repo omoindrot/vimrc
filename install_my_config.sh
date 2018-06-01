@@ -15,3 +15,6 @@ echo "Installed bash_profile"
 
 cat ~/.vim_runtime/configs/gitignore > ~/.gitignore
 echo "Installed user .gitignore"
+
+cat ~/.vim_runtime/configs/ipython_config.py > ~/.ipython/profile_default/ipython_config.py
+echo "Installed user .gitignore"
