@@ -29,3 +29,11 @@ echo "Installed user jupyter config"
 
 cp ~/.vim_runtime/dotfiles/custom.zsh ~/.oh-my-zsh/custom/custom.zsh
 echo "Installed my zsh custom config"
+
+
+# Install pure prompt for zsh
+# Clone it in the .oh-my-zsh repo
+git clone https://github.com/sindresorhus/pure ~/.oh-my-zsh/custom/plugins/pure
+# Link the files to ~/.zfunctions (which is added in the $fpath)
+ln -s "$HOME/.oh-my-zsh/custom/plugins/pure/pure.zsh" "$HOME/.zfunctions/prompt_pure_setup"
+ln -s "$HOME/.oh-my-zsh/custom/plugins/pure/async.zsh" "$HOME/.zfunctions/async"
