@@ -38,8 +38,14 @@ if [ ! -d "$PURE_FOLDER" ] ; then
     git clone https://github.com/sindresorhus/pure ~/.oh-my-zsh/custom/plugins/pure
 fi
 # Link the files to ~/.zfunctions (which is added in the $fpath)
-mkdir -p "$HOME/.zfunctions"
-# Give correct rights
-chmod 755 "$HOME/.zfunctions"
-ln -s "$HOME/.oh-my-zsh/custom/plugins/pure/pure.zsh" "$HOME/.zfunctions/prompt_pure_setup"
-ln -s "$HOME/.oh-my-zsh/custom/plugins/pure/async.zsh" "$HOME/.zfunctions/async"
+if [ ! -d "$HOME/.zfunctions" ] ; then
+    mkdir "$HOME/.zfunctions"
+    # Give correct rights
+    chmod 755 "$HOME/.zfunctions"
+fi
+if [ ! -L "$HOME/.zfunctions/prompt_pure_setup" ] ; then
+    ln -s "$HOME/.oh-my-zsh/custom/plugins/pure/pure.zsh" "$HOME/.zfunctions/prompt_pure_setup"
+fi
+if [ ! -L "$HOME/.zfunctions/async" ] ; then
+    ln -s "$HOME/.oh-my-zsh/custom/plugins/pure/async.zsh" "$HOME/.zfunctions/async"
+fi
