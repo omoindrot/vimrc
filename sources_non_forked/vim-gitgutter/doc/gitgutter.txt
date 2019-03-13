@@ -148,6 +148,11 @@ Commands for operating on a hunk:~
                         Use |:pclose| or |CTRL-W_CTRL-Z| to close the preview
                         window.
 
+Commands for folds:~
+
+                                                     *gitgutter-:GitGutterFold*
+:GitGutterFold          Fold all unchanged lines.  Execute again to undo.
+
 
 ===============================================================================
 AUTOCOMMAND                                             *gitgutter-autocommand*
@@ -232,6 +237,7 @@ Most important option:~
 Git:~
 
     |g:gitgutter_git_executable|
+    |g:gitgutter_git_args|
     |g:gitgutter_diff_args|
     |g:gitgutter_diff_base|
 
@@ -269,6 +275,15 @@ Default: 'git'
 
 This option determines what git binary to use.  Set this if git is not on your
 path.
+
+                                                         *g:gitgutter_git_args*
+Default: empty
+
+Use this option to pass any extra arguments to git when running git-diff.
+For example:
+>
+    let g:gitgutter_git_args = '--git-dir=""'
+<
 
                                                         *g:gitgutter_diff_args*
 Default: empty
@@ -423,7 +438,7 @@ colorscheme or |vimrc|:
 You can either set these with `highlight GitGutterAdd {key}={arg}...` or link
 them to existing highlight groups with, say:
 >
-  highlight link GitGutterAdd DiffAdd
+  highlight link GitGutterAdd MyDiffAdd
 <
 
 To change the line highlights, set up the following highlight groups in your
@@ -433,6 +448,11 @@ colorscheme or |vimrc|:
     GitGutterChangeLine       " default: links to DiffChange
     GitGutterDeleteLine       " default: links to DiffDelete
     GitGutterChangeDeleteLine " default: links to GitGutterChangeLineDefault
+<
+
+For example, to use |hl-DiffText| instead of |hl-DiffChange|:
+>
+    highlight link GitGutterChangeLine DiffChange
 <
 
 
@@ -445,19 +465,29 @@ a. How do I turn off realtime updates?
 >
     autocmd! gitgutter CursorHold,CursorHoldI
 <
-b. Why can't I unstage staged changes?
+
+b. I turned off realtime updates, how can I have signs updated when I save a
+   file?
+
+  If you really want to update the signs when you save a file, add this to your
+  |vimrc|:
+>
+    autocmd BufWritePost * GitGutter
+<
+
+c. Why can't I unstage staged changes?
 
   This plugin is for showing changes between the working tree and the index
   (and staging/undoing those changes). Unstaging a staged hunk would require
   showing changes between the index and HEAD, which is out of scope.
 
-c. Why are the colours in the sign column weird?
+d. Why are the colours in the sign column weird?
 
   Your colorscheme is configuring the |hl-SignColumn| highlight group weirdly.
   Please see |g:gitgutter_override_sign_column_highlight| on customising the
   sign column.
 
-d. What happens if I also use another plugin which uses signs (e.g. Syntastic)?
+e. What happens if I also use another plugin which uses signs (e.g. Syntastic)?
 
   Vim only allows one sign per line.  Vim-gitgutter will not interfere with
   signs it did not add.

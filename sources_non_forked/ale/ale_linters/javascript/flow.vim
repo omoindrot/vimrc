@@ -4,7 +4,8 @@
 
 call ale#Set('javascript_flow_executable', 'flow')
 call ale#Set('javascript_flow_use_home_config', 0)
-call ale#Set('javascript_flow_use_global', 0)
+call ale#Set('javascript_flow_use_global', get(g:, 'ale_use_global_executables', 0))
+call ale#Set('javascript_flow_use_respect_pragma', 1)
 
 function! ale_linters#javascript#flow#GetExecutable(buffer) abort
     let l:flow_config = ale#path#FindNearestFile(a:buffer, '.flowconfig')
@@ -47,13 +48,14 @@ function! ale_linters#javascript#flow#GetCommand(buffer, version_lines) abort
 
     " If we can parse the version number, then only use --respect-pragma
     " if the version is >= 0.36.0, which added the argument.
-    let l:use_respect_pragma = empty(l:version)
-    \   || ale#semver#GTE(l:version, [0, 36])
+    let l:use_respect_pragma = ale#Var(a:buffer, 'javascript_flow_use_respect_pragma')
+    \   && (empty(l:version) || ale#semver#GTE(l:version, [0, 36]))
 
     return ale#Escape(l:executable)
     \   . ' check-contents'
     \   . (l:use_respect_pragma ? ' --respect-pragma': '')
-    \   . ' --json --from ale %s'
+    \   . ' --json --from ale %s < %t'
+    \   . (!has('win32') ? '; echo' : '')
 endfunction
 
 " Filter lines of flow output until we find the first line where the JSON
@@ -90,7 +92,6 @@ function! s:GetDetails(error) abort
     let l:detail = ''
 
     for l:extra_error in a:error.extra
-
         if has_key(l:extra_error, 'message')
             for l:extra_message in l:extra_error.message
                 let l:detail = s:ExtraErrorMsg(l:detail, l:extra_message.descr)
@@ -104,7 +105,6 @@ function! s:GetDetails(error) abort
                 endfor
             endfor
         endif
-
     endfor
 
     return l:detail
@@ -156,11 +156,11 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
         \}
 
         if has_key(l:error, 'extra')
-            let l:errorToAdd.detail = s:GetDetails(l:error)
+            let l:errorToAdd.detail = l:errorToAdd.text
+            \   . "\n" . s:GetDetails(l:error)
         endif
 
         call add(l:output, l:errorToAdd)
-
     endfor
 
     return l:output
@@ -168,11 +168,11 @@ endfunction
 
 call ale#linter#Define('javascript', {
 \   'name': 'flow',
-\   'executable_callback': 'ale_linters#javascript#flow#GetExecutable',
+\   'executable': function('ale_linters#javascript#flow#GetExecutable'),
 \   'command_chain': [
 \       {'callback': 'ale_linters#javascript#flow#VersionCheck'},
 \       {'callback': 'ale_linters#javascript#flow#GetCommand'},
 \   ],
 \   'callback': 'ale_linters#javascript#flow#Handle',
-\   'add_newline': !has('win32'),
+\   'read_buffer': 0,
 \})

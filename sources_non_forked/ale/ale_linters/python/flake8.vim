@@ -1,20 +1,22 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: flake8 for python files
 
-let g:ale_python_flake8_executable =
-\   get(g:, 'ale_python_flake8_executable', 'flake8')
-
-" Support an old setting as a fallback.
-let s:default_options = get(g:, 'ale_python_flake8_args', '')
-let g:ale_python_flake8_options =
-\   get(g:, 'ale_python_flake8_options', s:default_options)
-let g:ale_python_flake8_use_global = get(g:, 'ale_python_flake8_use_global', 0)
+call ale#Set('python_flake8_executable', 'flake8')
+call ale#Set('python_flake8_options', '')
+call ale#Set('python_flake8_use_global', get(g:, 'ale_use_global_executables', 0))
+call ale#Set('python_flake8_change_directory', 1)
+call ale#Set('python_flake8_auto_pipenv', 0)
 
 function! s:UsingModule(buffer) abort
     return ale#Var(a:buffer, 'python_flake8_options') =~# ' *-m flake8'
 endfunction
 
 function! ale_linters#python#flake8#GetExecutable(buffer) abort
+    if (ale#Var(a:buffer, 'python_auto_pipenv') || ale#Var(a:buffer, 'python_flake8_auto_pipenv'))
+    \ && ale#python#PipenvPresent(a:buffer)
+        return 'pipenv'
+    endif
+
     if !s:UsingModule(a:buffer)
         return ale#python#FindExecutable(a:buffer, 'python_flake8', ['flake8'])
     endif
@@ -39,8 +41,15 @@ function! ale_linters#python#flake8#VersionCheck(buffer) abort
 endfunction
 
 function! ale_linters#python#flake8#GetCommand(buffer, version_output) abort
+    let l:cd_string = ale#Var(a:buffer, 'python_flake8_change_directory')
+    \   ? ale#path#BufferCdString(a:buffer)
+    \   : ''
     let l:executable = ale_linters#python#flake8#GetExecutable(a:buffer)
     let l:version = ale#semver#GetVersion(l:executable, a:version_output)
+
+    let l:exec_args = l:executable =~? 'pipenv$'
+    \   ? ' run flake8'
+    \   : ''
 
     " Only include the --stdin-display-name argument if we can parse the
     " flake8 version, and it is recent enough to support it.
@@ -50,7 +59,8 @@ function! ale_linters#python#flake8#GetCommand(buffer, version_output) abort
 
     let l:options = ale#Var(a:buffer, 'python_flake8_options')
 
-    return ale#Escape(l:executable)
+    return l:cd_string
+    \   . ale#Escape(l:executable) . l:exec_args
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' --format=default'
     \   . l:display_name_args . ' -'
@@ -64,23 +74,18 @@ let s:end_col_pattern_map = {
 \}
 
 function! ale_linters#python#flake8#Handle(buffer, lines) abort
-    for l:line in a:lines[:10]
-        if match(l:line, '^Traceback') >= 0
-            return [{
-            \   'lnum': 1,
-            \   'text': 'An exception was thrown. See :ALEDetail',
-            \   'detail': join(a:lines, "\n"),
-            \}]
-        endif
-    endfor
+    let l:output = ale#python#HandleTraceback(a:lines, 10)
+
+    if !empty(l:output)
+        return l:output
+    endif
 
     " Matches patterns line the following:
     "
     " Matches patterns line the following:
     "
     " stdin:6:6: E111 indentation is not a multiple of four
-    let l:pattern = '\v^[a-zA-Z]?:?[^:]+:(\d+):?(\d+)?: ([[:alnum:]]+) (.*)$'
-    let l:output = []
+    let l:pattern = '\v^[a-zA-Z]?:?[^:]+:(\d+):?(\d+)?: ([[:alnum:]]+):? (.*)$'
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:code = l:match[3]
@@ -100,6 +105,7 @@ function! ale_linters#python#flake8#Handle(buffer, lines) abort
         let l:item = {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
+        \   'vcol': 1,
         \   'text': l:match[4],
         \   'code': l:code,
         \   'type': 'W',
@@ -137,7 +143,7 @@ endfunction
 
 call ale#linter#Define('python', {
 \   'name': 'flake8',
-\   'executable_callback': 'ale_linters#python#flake8#GetExecutable',
+\   'executable': function('ale_linters#python#flake8#GetExecutable'),
 \   'command_chain': [
 \       {'callback': 'ale_linters#python#flake8#VersionCheck'},
 \       {'callback': 'ale_linters#python#flake8#GetCommand', 'output_stream': 'both'},

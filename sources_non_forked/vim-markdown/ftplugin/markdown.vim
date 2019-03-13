@@ -609,7 +609,23 @@ if !exists('*s:EditUrlUnderCursor')
                     endif
                 endif
                 let l:url = fnameescape(fnamemodify(expand('%:h').'/'.l:url.l:ext, ':.'))
-                execute 'edit' l:url
+                let l:editmethod = ''
+                " determine how to open the linked file (split, tab, etc)
+                if exists('g:vim_markdown_edit_url_in')
+                  if g:vim_markdown_edit_url_in == 'tab'
+                    let l:editmethod = 'tabnew'
+                  elseif g:vim_markdown_edit_url_in == 'vsplit'
+                    let l:editmethod = 'vsp'
+                  elseif g:vim_markdown_edit_url_in == 'hsplit'
+                    let l:editmethod = 'sp'
+                  else
+                    let l:editmethod = 'edit'
+                  endif
+                else
+                  " default to current buffer
+                  let l:editmethod = 'edit'
+                endif
+                execute l:editmethod l:url
             endif
             if l:anchor != ''
                 silent! execute '/'.l:anchor
@@ -718,7 +734,7 @@ function! s:MarkdownHighlightSources(force)
                 let include = '@' . toupper(filetype)
             endif
             let command = 'syntax region %s matchgroup=%s start="^\s*```\s*%s$" matchgroup=%s end="\s*```$" keepend contains=%s%s'
-            execute printf(command, group, startgroup, ft, endgroup, include, has('conceal') && get(g:, 'vim_markdown_conceal', 1) ? ' concealends' : '')
+            execute printf(command, group, startgroup, ft, endgroup, include, has('conceal') && get(g:, 'vim_markdown_conceal', 1) && get(g:, 'vim_markdown_conceal_code_blocks', 1) ? ' concealends' : '')
             execute printf('syntax cluster mkdNonListItem add=%s', group)
 
             let b:mkd_known_filetypes[ft] = 1
@@ -752,13 +768,13 @@ endfunction
 
 
 function! s:MarkdownRefreshSyntax(force)
-    if &filetype == 'markdown' && line('$') > 1
+    if &filetype =~ 'markdown' && line('$') > 1
         call s:MarkdownHighlightSources(a:force)
     endif
 endfunction
 
 function! s:MarkdownClearSyntaxVariables()
-    if &filetype == 'markdown'
+    if &filetype =~ 'markdown'
         unlet! b:mkd_included_filetypes
     endif
 endfunction
