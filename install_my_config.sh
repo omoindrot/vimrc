@@ -21,8 +21,15 @@ echo "Installed bash_profile"
 cp ~/.vim_runtime/dotfiles/gitignore ~/.gitignore
 echo "Installed user .gitignore"
 
-cp ~/.vim_runtime/dotfiles/ipython_config.py ~/.ipython/profile_default/ipython_config.py
-echo "Installed user ipython_config.py"
+if [ ! -d ".ipython/profile_default" ] ; then
+    mkdir ".ipython/profile_default"
+fi
+cp ~/.vim_runtime/dotfiles/ipython/ipython_config.py ~/.ipython/profile_default/ipython_config.py
+if [ ! -d ".ipython/profile_default/startup" ] ; then
+    mkdir ".ipython/profile_default/startup"
+fi
+cp ~/.vim_runtime/dotfiles/ipython/keybindings.py ~/.ipython/profile_default/startup/keybindings.py
+echo "Installed user ipython config"
 
 cp ~/.vim_runtime/dotfiles/custom.js ~/.jupyter/custom/custom.js
 echo "Installed user jupyter config"
