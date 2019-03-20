@@ -183,3 +183,10 @@ nnoremap <silent> <leader>d :GitGutterToggle<cr>
 " => Vim Markdown
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:vim_markdown_folding_disabled = 1
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => AutoPairs
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Disable autopairs
+let b:autopairs_enabled = 0
