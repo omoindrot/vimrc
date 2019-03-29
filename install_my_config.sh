@@ -21,20 +21,20 @@ echo "Installed bash_profile"
 cp ~/.vim_runtime/dotfiles/gitignore_global ~/.gitignore_global
 echo "Installed user .gitignore_global"
 
-if [ ! -d "$HOME/.ipython/profile_default" ] ; then
-    mkdir "$HOME/.ipython/profile_default"
-fi
+# ipython config
+mkdir -p "$HOME/.ipython/profile_default"
+mkdir -p "$HOME/.ipython/profile_default/startup"
 cp "$HOME/.vim_runtime/dotfiles/ipython/ipython_config.py" "$HOME/.ipython/profile_default/ipython_config.py"
-if [ ! -d "$HOME/.ipython/profile_default/startup" ] ; then
-    mkdir "$HOME/.ipython/profile_default/startup"
-fi
 cp "$HOME/.vim_runtime/dotfiles/ipython/keybindings.py" "$HOME/.ipython/profile_default/startup/keybindings.py"
 echo "Installed user ipython config"
 
-cp ~/.vim_runtime/dotfiles/custom.js ~/.jupyter/custom/custom.js
+# jupyter config
+mkdir -p $HOME/.jupyter/custom
+cp $HOME/.vim_runtime/dotfiles/custom.js $HOME/.jupyter/custom/custom.js
 echo "Installed user jupyter config"
 
-cp ~/.vim_runtime/dotfiles/custom.zsh ~/.oh-my-zsh/custom/custom.zsh
+# zsh custom file
+cp $HOME/.vim_runtime/dotfiles/custom.zsh $HOME/.oh-my-zsh/custom/custom.zsh
 echo "Installed my zsh custom config"
 
 
@@ -45,11 +45,10 @@ if [ ! -d "$PURE_FOLDER" ] ; then
     git clone https://github.com/sindresorhus/pure ~/.oh-my-zsh/custom/plugins/pure
 fi
 # Link the files to ~/.zfunctions (which is added in the $fpath)
-if [ ! -d "$HOME/.zfunctions" ] ; then
-    mkdir "$HOME/.zfunctions"
-    # Give correct rights
-    chmod 755 "$HOME/.zfunctions"
-fi
+mkdir -p "$HOME/.zfunctions"
+# Give correct rights
+chmod 755 "$HOME/.zfunctions"
+
 if [ ! -L "$HOME/.zfunctions/prompt_pure_setup" ] ; then
     ln -s "$HOME/.oh-my-zsh/custom/plugins/pure/pure.zsh" "$HOME/.zfunctions/prompt_pure_setup"
 fi
