@@ -18,8 +18,8 @@ echo "Installed git configuration successfully! Enjoy :-)"
 cp ~/.vim_runtime/dotfiles/bash_profile ~/.bash_profile
 echo "Installed bash_profile"
 
-cp ~/.vim_runtime/dotfiles/gitignore ~/.gitignore
-echo "Installed user .gitignore"
+cp ~/.vim_runtime/dotfiles/gitignore_global ~/.gitignore_global
+echo "Installed user .gitignore_global"
 
 if [ ! -d "$HOME/.ipython/profile_default" ] ; then
     mkdir "$HOME/.ipython/profile_default"
