@@ -25,3 +25,9 @@ let g:ale_linters = {
 let g:ale_lint_on_text_changed = 'never'
 " Don't run linters when opening the file
 let g:ale_lint_on_enter = 0
+
+" When I don't have the right version
+"let g:go_version_warning = 0
+
+" Disable this if vim version is lower
+"let g:loaded_comfortable_motion = 1
