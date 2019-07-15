@@ -31,3 +31,9 @@ let g:ale_lint_on_enter = 0
 
 " Disable this if vim version is lower
 "let g:loaded_comfortable_motion = 1
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => SuperTab (autocomplete)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
