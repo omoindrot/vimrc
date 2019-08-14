@@ -8,8 +8,10 @@ if ! [ -x "$(command -v zsh)" ]; then
     exit 1
 fi
 
-cd ~/.vim_runtime
-cp ~/.vim_runtime/dotfiles/tmux.conf ~/.tmux.conf
+cd $HOME/.vim_runtime
+# cp ~/.vim_runtime/dotfiles/tmux.conf ~/.tmux.conf
+ln -s -f $HOME/.vim_runtime/.tmux/.tmux.conf $HOME
+cp $HOME/.vim_runtime/dotfiles/tmux.conf.local $HOME/.tmux.conf.local
 echo "Installed tmux configuration successfully! Enjoy :-)"
 
 cp ~/.vim_runtime/dotfiles/gitconfig ~/.gitconfig
