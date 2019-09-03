@@ -296,5 +296,11 @@ set -g history-limit 50000
 #set -g status-position top
 
 # Remove binding of C-z (because when hitting C-a-z to go full screen, tmux understands C-a + C-z and exits)
-# unbind C-z
-# bind-key C-z resize-pane -Z
+unbind C-z
+bind-key C-z resize-pane -Z
+
+# Remove repeat of keys when changing panes
+bind h select-pane -L  # move left
+bind j select-pane -D  # move down
+bind k select-pane -U  # move up
+bind l select-pane -R  # move right
