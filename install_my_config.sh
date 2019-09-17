@@ -39,6 +39,10 @@ echo "Installed user jupyter config"
 cp $HOME/.vim_runtime/dotfiles/custom.zsh $HOME/.oh-my-zsh/custom/custom.zsh
 echo "Installed my zsh custom config"
 
+# zsh custom file
+cp $HOME/.vim_runtime/dotfiles/condarc $HOME/.condarc
+echo "Installed condarc"
+
 
 # Install pure prompt for zsh
 # Clone it in the .oh-my-zsh repo
