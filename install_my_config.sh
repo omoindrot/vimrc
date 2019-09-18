@@ -9,6 +9,11 @@ if ! [ -x "$(command -v zsh)" ]; then
 fi
 
 cd $HOME/.vim_runtime
+
+mkdir -p "$HOME/.vim/indent"
+cp "$HOME/.vim_runtime/dotfiles/python.vim" "$HOME/.vim/indent/python.vim"
+echo "Installed user ipython config"
+
 # cp ~/.vim_runtime/dotfiles/tmux.conf ~/.tmux.conf
 ln -s -f $HOME/.vim_runtime/.tmux/.tmux.conf $HOME
 cp $HOME/.vim_runtime/dotfiles/tmux.conf.local $HOME/.tmux.conf.local
