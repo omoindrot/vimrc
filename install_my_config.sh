@@ -10,8 +10,8 @@ fi
 
 cd $HOME/.vim_runtime
 
-mkdir -p "$HOME/.vim/indent"
-cp "$HOME/.vim_runtime/dotfiles/python.vim" "$HOME/.vim/indent/python.vim"
+mkdir -p "$HOME/.vim/after/indent"
+cp "$HOME/.vim_runtime/dotfiles/python.vim" "$HOME/.vim/after/indent/python.vim"
 echo "Installed user ipython config"
 
 # cp ~/.vim_runtime/dotfiles/tmux.conf ~/.tmux.conf
