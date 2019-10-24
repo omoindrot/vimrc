@@ -15,3 +15,9 @@ if getattr(ip, "pt_app"):
     registry.add_binding(u"j", u"k",
                          filter=(HasFocus(DEFAULT_BUFFER)
                                  & ViInsertMode()))(switch_to_navigation_mode)
+    registry.add_binding(u"J", u"k",
+                         filter=(HasFocus(DEFAULT_BUFFER)
+                                 & ViInsertMode()))(switch_to_navigation_mode)
+    registry.add_binding(u"J", u"K",
+                         filter=(HasFocus(DEFAULT_BUFFER)
+                                 & ViInsertMode()))(switch_to_navigation_mode)
