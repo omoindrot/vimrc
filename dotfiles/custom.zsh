@@ -59,6 +59,8 @@ bindkey -v
 
 # Change to normal mode with "jk"
 bindkey -M viins "jk" vi-cmd-mode
+bindkey -M viins "Jk" vi-cmd-mode
+bindkey -M viins "JK" vi-cmd-mode
 
 # Beginning search with arrow keys
 bindkey "^[OA" up-line-or-beginning-search
