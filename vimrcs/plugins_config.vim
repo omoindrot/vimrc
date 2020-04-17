@@ -81,9 +81,10 @@ let g:NERDTreeWinPos = "right"
 let NERDTreeShowHidden=0
 let NERDTreeIgnore = ['\.pyc$', '__pycache__']
 let g:NERDTreeWinSize=35
-map <leader>nn :NERDTreeToggle<cr>
+let g:NERDTreeQuitOnOpen = 1
+map <leader>nf :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark<Space>
-map <leader>nf :NERDTreeFind<cr>
+map <leader>nn :NERDTreeFind<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -183,6 +184,11 @@ nnoremap <silent> <leader>d :GitGutterToggle<cr>
 " => Vim Markdown
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:vim_markdown_folding_disabled = 1
+" To disable conceal regardless of `conceallevel` setting, add the following to your `.vimrc`:
+let g:vim_markdown_conceal = 0
+" To disable math conceal with LaTeX math syntax enabled, add the following to your `.vimrc`:
+let g:tex_conceal = ""
+let g:vim_markdown_math = 1
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
