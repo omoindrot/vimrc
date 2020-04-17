@@ -200,11 +200,11 @@
 #c.InteractiveShell.enable_html_pager = False
 
 ## Total length of command history
-#c.InteractiveShell.history_length = 10000
+c.InteractiveShell.history_length = 100000
 
 ## The number of saved history entries to be loaded into the history buffer at
 #  startup.
-#c.InteractiveShell.history_load_length = 1000
+c.InteractiveShell.history_load_length = 10000
 
 ##
 #c.InteractiveShell.ipython_dir = ''

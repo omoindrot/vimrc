@@ -52,4 +52,4 @@ let g:AutoPairs = {}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => SuperTab (autocomplete)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+" let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
