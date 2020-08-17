@@ -12,7 +12,7 @@ cd $HOME/.vim_runtime
 
 mkdir -p "$HOME/.vim/after/indent"
 cp "$HOME/.vim_runtime/dotfiles/python.vim" "$HOME/.vim/after/indent/python.vim"
-echo "Installed user ipython config"
+echo "Installed user vim indentation python"
 
 # cp ~/.vim_runtime/dotfiles/tmux.conf ~/.tmux.conf
 ln -s -f $HOME/.vim_runtime/.tmux/.tmux.conf $HOME
