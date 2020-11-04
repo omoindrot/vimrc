@@ -189,6 +189,9 @@ let g:vim_markdown_conceal = 0
 " To disable math conceal with LaTeX math syntax enabled, add the following to your `.vimrc`:
 let g:tex_conceal = ""
 let g:vim_markdown_math = 1
+" Annoying indent issue
+" https://github.com/plasticboy/vim-markdown/issues/126
+au filetype markdown set indentexpr=
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
